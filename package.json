@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rimraf ./build && tsc",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -21,10 +20,6 @@
   "homepage": "https://github.com/dev-sandeepsingh/node-express-typescript#readme",
   "dependencies": {
     "dotenv": "^16.0.1",
-    "express": "^4.18.1",
-    "rimraf": "^3.0.2"
-  },
-  "devDependencies": {
-    "typescript": "^4.7.3"
+    "express": "^4.18.1"
   }
 }
