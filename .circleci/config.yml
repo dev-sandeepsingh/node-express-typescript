@@ -1,0 +1,34 @@
+version: 2
+notify:
+  webhooks:
+    # A list of hashes representing hooks. Only the url field is supported.
+    - url: https://api.reviewee.it/notification/ci
+jobs:
+  build:
+    working_directory: ~/node-express-typescript
+    docker:
+      - image: cimg/node:16.3.0
+      - image: postgres:latest
+        environment:
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
+    environment:
+      - REVIEWEE_URL: https://api.reviewee.it
+      - COMMITS_CHECK_ENDPOINT: repository/growthval-api/haveRejectedCommits
+      - COMMITS_CHECK_INDICATOR: \"success\":true
+    steps:
+      - run:
+          name: Check rejected commits
+          command: wget ${REVIEWEE_URL}/${COMMITS_CHECK_ENDPOINT} -q -O - | grep -q ${COMMITS_CHECK_INDICATOR}
+      - checkout
+      - run:
+          name: Install System Dependencies
+          command: sudo apt-get update -qq      
+      - run: 
+          name: Install Node dependencies
+          command: npm install
+      - run:
+         name: Deploy to Heroku
+         command: git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_UAT_APP_NAME.git HEAD:refs/heads/master
+  
